@@ -184,3 +184,9 @@
 - [ ] 容器化改造
 - [ ] 多集群管理
 - [ ] 云原生监控 
+## 构建工具与容器化
+- [构建工具与容器化](./build-tools/README.md) - 现代构建工具、容器化构建、CI/CD集成
+  - [构建系统详解](./build-tools/01-build-systems/README.md) - Maven、Gradle、Bazel等构建系统
+  - [容器化构建](./build-tools/02-container-build/README.md) - Docker、BuildKit、安全扫描
+  - [CI/CD集成](./build-tools/03-cicd-integration/README.md) - GitHub Actions、GitLab CI、Jenkins集成
+
