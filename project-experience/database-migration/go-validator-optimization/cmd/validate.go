@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	workers    int
+	maxWorkers int
 	outputFile string
 	dryRun     bool
 	azureHost  string
@@ -44,7 +44,7 @@ var validateCmd = &cobra.Command{
 
 使用示例:
   multi-database-validator validate                           # 使用配置文件验证
-  multi-database-validator validate --workers 5              # 设置并发数
+  multi-database-validator validate --max-workers 5          # 设置并发数
   multi-database-validator validate --dry-run                # 试运行模式
   multi-database-validator validate --azure-host azure.com   # 命令行指定Azure主机`,
 	RunE: runValidate,
@@ -54,7 +54,7 @@ func init() {
 	rootCmd.AddCommand(validateCmd)
 
 	// 添加标志
-	validateCmd.Flags().IntVarP(&workers, "workers", "w", 3, "最大并发数")
+	validateCmd.Flags().IntVarP(&maxWorkers, "max-workers", "w", 3, "最大并发数")
 	validateCmd.Flags().StringVarP(&outputFile, "output", "o", "consistency_report.json", "输出报告文件")
 	validateCmd.Flags().BoolVar(&dryRun, "dry-run", false, "试运行模式，不执行实际验证")
 
@@ -71,7 +71,7 @@ func init() {
 	validateCmd.Flags().StringVar(&awsDB, "aws-database", "", "AWS数据库名称")
 
 	// 绑定环境变量
-	viper.BindPFlag("workers", validateCmd.Flags().Lookup("workers"))
+	// 注意：workers参数不绑定到Viper，只用于命令行参数
 	viper.BindPFlag("output", validateCmd.Flags().Lookup("output"))
 	viper.BindPFlag("dry_run", validateCmd.Flags().Lookup("dry-run"))
 
@@ -101,8 +101,15 @@ func runValidate(cmd *cobra.Command, args []string) error {
 	startTime := time.Now()
 
 	// 创建配置对象
+	// 优先使用命令行参数，然后使用配置文件中的max_workers
+	actualMaxWorkers := maxWorkers
+	if actualMaxWorkers == 3 { // 如果使用默认值，尝试从配置文件获取
+		if configMaxWorkers := viper.GetInt("max_workers"); configMaxWorkers > 0 {
+			actualMaxWorkers = configMaxWorkers
+		}
+	}
 	cfg := &types.Config{
-		MaxWorkers: viper.GetInt("workers"),
+		MaxWorkers: actualMaxWorkers,
 	}
 
 	// 解析Azure和AWS配置
@@ -168,7 +175,7 @@ func runValidate(cmd *cobra.Command, args []string) error {
 // initValidationConfig 初始化验证配置
 func initValidationConfig() error {
 	// 设置默认值
-	viper.SetDefault("workers", 3)
+	// 注意：workers参数不设置默认值，只用于命令行参数
 	viper.SetDefault("output", "consistency_report.json")
 	viper.SetDefault("dry_run", false)
 
@@ -202,9 +209,17 @@ func initValidationConfig() error {
 
 // showConfig 显示当前配置
 func showConfig() {
+	// 计算实际使用的并发数
+	actualMaxWorkers := maxWorkers
+	if actualMaxWorkers == 3 { // 如果使用默认值，尝试从配置文件获取
+		if configMaxWorkers := viper.GetInt("max_workers"); configMaxWorkers > 0 {
+			actualMaxWorkers = configMaxWorkers
+		}
+	}
+
 	fmt.Println("📋 当前配置:")
 	fmt.Printf("  - 配置文件: %s\n", viper.ConfigFileUsed())
-	fmt.Printf("  - 并发数: %d\n", viper.GetInt("workers"))
+	fmt.Printf("  - 并发数: %d\n", actualMaxWorkers)
 	fmt.Printf("  - 输出文件: %s\n", viper.GetString("output"))
 	fmt.Printf("  - 详细模式: %t\n", viper.GetBool("verbose"))
 	fmt.Printf("  - 试运行: %t\n", viper.GetBool("dry_run"))

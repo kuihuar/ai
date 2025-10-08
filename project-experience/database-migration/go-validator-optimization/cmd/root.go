@@ -36,7 +36,7 @@ var rootCmd = &cobra.Command{
   multi-database-validator validate                    # 使用默认配置验证
   multi-database-validator validate --config config.yaml  # 指定配置文件
   multi-database-validator init --format yaml         # 创建YAML配置文件
-  multi-database-validator validate --workers 5       # 设置并发数`,
+  multi-database-validator validate --max-workers 5   # 设置并发数`,
 	Version: "2.0.0",
 }
 

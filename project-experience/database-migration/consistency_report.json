@@ -1,32 +1,413 @@
 {
-  "timestamp": "2025-10-08T14:09:39.621106",
+  "timestamp": "2025-10-08T18:42:38.323171",
   "total_databases": 2,
-  "successful_validations": 0,
-  "inconsistent_databases": 0,
-  "error_databases": 2,
-  "success_rate": "0.00%",
+  "successful_validations": 1,
+  "inconsistent_databases": 1,
+  "error_databases": 0,
+  "success_rate": "50.00%",
   "results": {
-    "db1": {
-      "database": "db1",
-      "azure_instance": "azure-db1",
-      "aws_instance": "aws-db1",
-      "status": "ERROR",
-      "errors": [
-        "数据库 db1 验证失败: (2003, \"Can't connect to MySQL server on 'your-azure-mysql1.mysql.database.azure.com' ([Errno 8] nodename nor servname provided, or not known)\")"
-      ],
-      "start_time": "2025-10-08T14:09:39.269506",
-      "end_time": "2025-10-08T14:09:39.269570"
-    },
-    "db2": {
-      "database": "db2",
+    "nancalacc": {
+      "database": "nancalacc",
       "azure_instance": "azure-db2",
       "aws_instance": "aws-db2",
-      "status": "ERROR",
-      "errors": [
-        "数据库 db2 验证失败: (2003, \"Can't connect to MySQL server on 'your-azure-mysql2.mysql.database.azure.com' ([Errno 8] nodename nor servname provided, or not known)\")"
+      "azure_tables": 8,
+      "aws_tables": 8,
+      "table_comparisons": [
+        {
+          "table": "task",
+          "azure_checksum": "d125b20940e6c870ba2031e59f149dad",
+          "aws_checksum": "d125b20940e6c870ba2031e59f149dad",
+          "match": true,
+          "azure_instance": "azure-db2",
+          "aws_instance": "aws-db2",
+          "azure_database": "nancalacc",
+          "aws_database": "nancalacc-aws"
+        },
+        {
+          "table": "tb_company_cfg",
+          "azure_checksum": "5163f522b84e2ee30f9b275f8592a524",
+          "aws_checksum": "5163f522b84e2ee30f9b275f8592a524",
+          "match": true,
+          "azure_instance": "azure-db2",
+          "aws_instance": "aws-db2",
+          "azure_database": "nancalacc",
+          "aws_database": "nancalacc-aws"
+        },
+        {
+          "table": "tb_las_department",
+          "azure_checksum": "db6162d9315f785f71d27bff9b16dc6c",
+          "aws_checksum": "db6162d9315f785f71d27bff9b16dc6c",
+          "match": true,
+          "azure_instance": "azure-db2",
+          "aws_instance": "aws-db2",
+          "azure_database": "nancalacc",
+          "aws_database": "nancalacc-aws"
+        },
+        {
+          "table": "tb_las_department_increment",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db2",
+          "aws_instance": "aws-db2",
+          "azure_database": "nancalacc",
+          "aws_database": "nancalacc-aws"
+        },
+        {
+          "table": "tb_las_department_user",
+          "azure_checksum": "a919f661ef4868bb7554ea3dd12b7f7b",
+          "aws_checksum": "a919f661ef4868bb7554ea3dd12b7f7b",
+          "match": true,
+          "azure_instance": "azure-db2",
+          "aws_instance": "aws-db2",
+          "azure_database": "nancalacc",
+          "aws_database": "nancalacc-aws"
+        },
+        {
+          "table": "tb_las_department_user_increment",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db2",
+          "aws_instance": "aws-db2",
+          "azure_database": "nancalacc",
+          "aws_database": "nancalacc-aws"
+        },
+        {
+          "table": "tb_las_user",
+          "azure_checksum": "d2bf42fa886d20e89c540b02a443e61c",
+          "aws_checksum": "d2bf42fa886d20e89c540b02a443e61c",
+          "match": true,
+          "azure_instance": "azure-db2",
+          "aws_instance": "aws-db2",
+          "azure_database": "nancalacc",
+          "aws_database": "nancalacc-aws"
+        },
+        {
+          "table": "tb_las_user_increment",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db2",
+          "aws_instance": "aws-db2",
+          "azure_database": "nancalacc",
+          "aws_database": "nancalacc-aws"
+        }
       ],
-      "start_time": "2025-10-08T14:09:39.619789",
-      "end_time": "2025-10-08T14:09:39.620166"
+      "status": "SUCCESS",
+      "errors": [],
+      "start_time": "2025-10-08T18:42:37.626200",
+      "end_time": "2025-10-08T18:42:38.196907"
+    },
+    "huasu": {
+      "database": "huasu",
+      "azure_instance": "azure-db1",
+      "aws_instance": "aws-db1",
+      "azure_tables": 34,
+      "aws_tables": 30,
+      "table_comparisons": [
+        {
+          "table": "casbin_rule",
+          "azure_checksum": "59d1ee5c0971f80c86c89839aace0089",
+          "aws_checksum": "a7264068ba58f84f199519a0b396f7aa",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "exa_attachment_category",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "exa_customers",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "exa_file_chunks",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "exa_file_upload_and_downloads",
+          "azure_checksum": "05ab68464a14b52a5aa754c4873ba9b5",
+          "aws_checksum": "a7b7127ef8684fb631a268a695731a56",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "exa_files",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "gva_announcements_info",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "jwt_blacklists",
+          "azure_checksum": "9969401f710cb391df0bad3d619847c3",
+          "aws_checksum": "empty_table",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_apis",
+          "azure_checksum": "b024d04dc8743c78297890c88d9766b8",
+          "aws_checksum": "fee69bc1508064d353d39f27ca251e1f",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_authorities",
+          "azure_checksum": "89e0d597eeece20379b5a7272df4a2c7",
+          "aws_checksum": "09a785e180607e8c9068c8acecab0dea",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_authority_btns",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_authority_menus",
+          "azure_checksum": "30b97b17c8f08cb097d561883c1036de",
+          "aws_checksum": "49fe6cc6d99992eab210633f1c73b196",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_auto_code_histories",
+          "azure_checksum": "9b6d0014733b057ba717ae79851c91d5",
+          "aws_checksum": "2526694c6e6974f3ce8cab98a67d9c23",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_auto_code_packages",
+          "azure_checksum": "7be989b17b067f9b5ec2e90184051ab4",
+          "aws_checksum": "afaf5d3bb5ada55e2bf56415a37148da",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_base_menu_btns",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_base_menu_parameters",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_base_menus",
+          "azure_checksum": "43eb5757049c7fc58f7b51deaddac2b3",
+          "aws_checksum": "999376562fdece77e086d93e8ea504c0",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_data_authority_id",
+          "azure_checksum": "67eaa9e8fa0acbb73ff3cbc829dc757e",
+          "aws_checksum": "67eaa9e8fa0acbb73ff3cbc829dc757e",
+          "match": true,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_dictionaries",
+          "azure_checksum": "0307f1f4eafee71ab7f8647e60ddf776",
+          "aws_checksum": "7b4d96bb9291c97dc40c1967dd04abc5",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_dictionary_details",
+          "azure_checksum": "e35a701660def44e0a3e02d70ee7c44a",
+          "aws_checksum": "b8ebf13c4e129cdad92675ac9c8238f5",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_export_template_condition",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_export_template_join",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_export_templates",
+          "azure_checksum": "3951d3de24bc11dd18636e5af32530cb",
+          "aws_checksum": "dc4d8fe8d957151ff827b34a24d8ce42",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_ignore_apis",
+          "azure_checksum": "a1ea5057e275bed7f8d19c22ec0873aa",
+          "aws_checksum": "70a66b17bc8ca88ae7cd6536503a7275",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_operation_records",
+          "azure_checksum": "72674ed86b4b06456c7510ac46025359",
+          "aws_checksum": "1179c5da4fa5c71c6e218950497fa7f2",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_params",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_user_authority",
+          "azure_checksum": "c994b0a31a77b7966e46c26df60a900f",
+          "aws_checksum": "bfccbbf95269d2006281586bc531dad5",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_users",
+          "azure_checksum": "e80dfedfa9995c338a481a5bc397f14c",
+          "aws_checksum": "49bd0020ab8724e812e1541f9e27c276",
+          "match": false,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        },
+        {
+          "table": "sys_versions",
+          "azure_checksum": "empty_table",
+          "aws_checksum": "empty_table",
+          "match": true,
+          "azure_instance": "azure-db1",
+          "aws_instance": "aws-db1",
+          "azure_database": "huasu",
+          "aws_database": "gva"
+        }
+      ],
+      "status": "INCONSISTENT",
+      "errors": [
+        "表数量不一致: Azure(34) vs AWS(30)",
+        "表 hs_carousel 在AWS中不存在",
+        "表 hs_construction_manage 在AWS中不存在",
+        "表 hs_news 在AWS中不存在",
+        "表 hs_news_copy1 在AWS中不存在",
+        "表 hs_notice 在AWS中不存在"
+      ],
+      "start_time": "2025-10-08T18:42:37.629992",
+      "end_time": "2025-10-08T18:42:38.317344"
     }
   }
 }
