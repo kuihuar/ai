@@ -1,0 +1,32 @@
+{
+  "timestamp": "2025-10-08T14:09:39.621106",
+  "total_databases": 2,
+  "successful_validations": 0,
+  "inconsistent_databases": 0,
+  "error_databases": 2,
+  "success_rate": "0.00%",
+  "results": {
+    "db1": {
+      "database": "db1",
+      "azure_instance": "azure-db1",
+      "aws_instance": "aws-db1",
+      "status": "ERROR",
+      "errors": [
+        "数据库 db1 验证失败: (2003, \"Can't connect to MySQL server on 'your-azure-mysql1.mysql.database.azure.com' ([Errno 8] nodename nor servname provided, or not known)\")"
+      ],
+      "start_time": "2025-10-08T14:09:39.269506",
+      "end_time": "2025-10-08T14:09:39.269570"
+    },
+    "db2": {
+      "database": "db2",
+      "azure_instance": "azure-db2",
+      "aws_instance": "aws-db2",
+      "status": "ERROR",
+      "errors": [
+        "数据库 db2 验证失败: (2003, \"Can't connect to MySQL server on 'your-azure-mysql2.mysql.database.azure.com' ([Errno 8] nodename nor servname provided, or not known)\")"
+      ],
+      "start_time": "2025-10-08T14:09:39.619789",
+      "end_time": "2025-10-08T14:09:39.620166"
+    }
+  }
+}

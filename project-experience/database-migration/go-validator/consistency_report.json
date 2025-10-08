@@ -1,0 +1,38 @@
+{
+  "timestamp": "2025-10-08T14:27:19+08:00",
+  "total_databases": 2,
+  "successful_validations": 0,
+  "inconsistent_databases": 0,
+  "error_databases": 2,
+  "success_rate": "0.00%",
+  "results": {
+    "db1": {
+      "database": "db1",
+      "azure_instance": "azure-db1",
+      "aws_instance": "aws-db1",
+      "azure_tables": 0,
+      "aws_tables": 0,
+      "table_comparisons": [],
+      "status": "ERROR",
+      "errors": [
+        "Azure数据库连接测试失败: dial tcp: lookup your-azure-mysql1.mysql.database.azure.com: no such host"
+      ],
+      "start_time": "2025-10-08T14:27:17+08:00",
+      "end_time": "2025-10-08T14:27:19+08:00"
+    },
+    "db2": {
+      "database": "db2",
+      "azure_instance": "azure-db2",
+      "aws_instance": "aws-db2",
+      "azure_tables": 0,
+      "aws_tables": 0,
+      "table_comparisons": [],
+      "status": "ERROR",
+      "errors": [
+        "Azure数据库连接测试失败: dial tcp: lookup your-azure-mysql2.mysql.database.azure.com: no such host"
+      ],
+      "start_time": "2025-10-08T14:27:17+08:00",
+      "end_time": "2025-10-08T14:27:18+08:00"
+    }
+  }
+}

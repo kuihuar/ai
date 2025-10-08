@@ -1,0 +1,37 @@
+# 生产环境配置文件
+# Production Environment Configuration
+
+azure:
+  - name: azure-prod-db1
+    host: prod-azure-mysql1.mysql.database.azure.com
+    user: prod_user
+    password: ${AZURE_PASSWORD}  # 使用环境变量
+    database: production_db1
+    charset: utf8mb4
+  - name: azure-prod-db2
+    host: prod-azure-mysql2.mysql.database.azure.com
+    user: prod_user
+    password: ${AZURE_PASSWORD}  # 使用环境变量
+    database: production_db2
+    charset: utf8mb4
+
+aws:
+  - name: aws-prod-db1
+    host: prod-aws-rds1.region.rds.amazonaws.com
+    user: prod_user
+    password: ${AWS_PASSWORD}  # 使用环境变量
+    database: production_db1
+    charset: utf8mb4
+  - name: aws-prod-db2
+    host: prod-aws-rds2.region.rds.amazonaws.com
+    user: prod_user
+    password: ${AWS_PASSWORD}  # 使用环境变量
+    database: production_db2
+    charset: utf8mb4
+
+# 生产环境配置
+max_workers: 5
+output_dir: /var/log/multi-database-validator
+output: prod_consistency_report.json
+verbose: false
+log_level: info

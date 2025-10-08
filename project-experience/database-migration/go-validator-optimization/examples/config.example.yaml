@@ -1,0 +1,51 @@
+# 多数据库一致性验证工具配置文件示例
+# 请根据实际情况修改数据库连接信息
+
+# Azure数据库实例配置
+azure:
+  - name: azure-prod-db1
+    host: your-azure-mysql1.mysql.database.azure.com
+    user: your_username
+    password: your_password
+    database: production_db1
+    charset: utf8mb4
+  - name: azure-prod-db2
+    host: your-azure-mysql2.mysql.database.azure.com
+    user: your_username
+    password: your_password
+    database: production_db2
+    charset: utf8mb4
+
+# AWS数据库实例配置
+aws:
+  - name: aws-prod-db1
+    host: your-aws-rds1.region.rds.amazonaws.com
+    user: your_username
+    password: your_password
+    database: production_db1
+    charset: utf8mb4
+  - name: aws-prod-db2
+    host: your-aws-rds2.region.rds.amazonaws.com
+    user: your_username
+    password: your_password
+    database: production_db2
+    charset: utf8mb4
+
+# 验证配置
+max_workers: 3          # 最大并发数
+output: consistency_report.json  # 输出报告文件
+verbose: false          # 详细输出
+dry_run: false         # 试运行模式
+
+# 日志配置
+log_level: info        # 日志级别 (debug, info, warn, error)
+
+# 命令行参数覆盖（可选）
+azure_host: ""
+azure_user: ""
+azure_password: ""
+azure_database: ""
+aws_host: ""
+aws_user: ""
+aws_password: ""
+aws_database: ""

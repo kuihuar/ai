@@ -1,0 +1,25 @@
+# 开发环境配置文件
+# Development Environment Configuration
+
+azure:
+  - name: azure-dev-db1
+    host: dev-azure-mysql1.mysql.database.azure.com
+    user: dev_user
+    password: dev_password
+    database: dev_db1
+    charset: utf8mb4
+
+aws:
+  - name: aws-dev-db1
+    host: dev-aws-rds1.region.rds.amazonaws.com
+    user: dev_user
+    password: dev_password
+    database: dev_db1
+    charset: utf8mb4
+
+# 开发环境配置
+max_workers: 2
+output_dir: output
+output: dev_consistency_report.json
+verbose: true
+log_level: debug

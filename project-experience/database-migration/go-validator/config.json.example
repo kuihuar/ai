@@ -1,0 +1,55 @@
+{
+  "azure": [
+    {
+      "name": "azure-db1",
+      "host": "your-azure-mysql1.mysql.database.azure.com",
+      "user": "your_username",
+      "password": "your_password",
+      "database": "db1",
+      "charset": "utf8mb4"
+    },
+    {
+      "name": "azure-db2",
+      "host": "your-azure-mysql2.mysql.database.azure.com",
+      "user": "your_username",
+      "password": "your_password",
+      "database": "db2",
+      "charset": "utf8mb4"
+    },
+    {
+      "name": "azure-db3",
+      "host": "your-azure-mysql3.mysql.database.azure.com",
+      "user": "your_username",
+      "password": "your_password",
+      "database": "db3",
+      "charset": "utf8mb4"
+    }
+  ],
+  "aws": [
+    {
+      "name": "aws-db1",
+      "host": "your-aws-rds1.region.rds.amazonaws.com",
+      "user": "your_username",
+      "password": "your_password",
+      "database": "db1",
+      "charset": "utf8mb4"
+    },
+    {
+      "name": "aws-db2",
+      "host": "your-aws-rds2.region.rds.amazonaws.com",
+      "user": "your_username",
+      "password": "your_password",
+      "database": "db2",
+      "charset": "utf8mb4"
+    },
+    {
+      "name": "aws-db3",
+      "host": "your-aws-rds3.region.rds.amazonaws.com",
+      "user": "your_username",
+      "password": "your_password",
+      "database": "db3",
+      "charset": "utf8mb4"
+    }
+  ],
+  "max_workers": 3
+}

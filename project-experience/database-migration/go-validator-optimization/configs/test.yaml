@@ -1,0 +1,25 @@
+# 测试环境配置文件
+# Test Environment Configuration
+
+azure:
+  - name: azure-test-db1
+    host: test-azure-mysql1.mysql.database.azure.com
+    user: test_user
+    password: test_password
+    database: test_db1
+    charset: utf8mb4
+
+aws:
+  - name: aws-test-db1
+    host: test-aws-rds1.region.rds.amazonaws.com
+    user: test_user
+    password: test_password
+    database: test_db1
+    charset: utf8mb4
+
+# 测试环境配置
+max_workers: 1
+output_dir: output
+output: test_consistency_report.json
+verbose: true
+log_level: debug
