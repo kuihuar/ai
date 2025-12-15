@@ -183,7 +183,7 @@
   - [ ] TDSQL
   - [ ] 云数据仓库
 
-## 数据库工具
+## 数据库工具和框架
 - [ ] 管理工具
   - [ ] phpMyAdmin
   - [ ] Navicat
@@ -194,9 +194,16 @@
   - [ ] Grafana
   - [ ] Zabbix
 - [ ] 迁移工具
+  - [ ] [数据库迁移管理工具与实践](./migration-tools-practices.md) - 全面的迁移工具对比和实践指南
   - [ ] Flyway
   - [ ] Liquibase
+  - [ ] Alembic (Python/SQLAlchemy)
+  - [ ] TypeORM Migrations
+  - [ ] Ent Migrations (Go)
+  - [ ] Prisma Migrate
   - [ ] 数据同步工具
+- [ ] ORM 和框架
+  - [ ] [Ent、Schema 和 GraphQL](./ent-graphql-schema.md) - Ent 框架与 GraphQL 集成指南
 
 ## 实际项目
 - [ ] 电商数据库设计

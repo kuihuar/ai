@@ -14,6 +14,15 @@ func main() {
 	// closure.DemoClosure()
 	// return
 }
+
+func readData(ch <-chan string) {
+
+	val, ok := <-ch
+	if !ok {
+		return
+	}
+	fmt.Println(val)
+}
 func mainSubsequence() {
 
 	fmt.Println("🚀 最长公共子序列 (LCS) 算法演示程序")

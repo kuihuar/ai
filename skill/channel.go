@@ -350,6 +350,7 @@ func generate(count int) <-chan int {
 	}()
 	return out
 }
+
 // input <-chan int 只读 channel（只能接收数据）
 func square(input <-chan int) <-chan int {
 	out := make(chan int)
@@ -751,4 +752,156 @@ func ChannelSummary() {
 	fmt.Println("6. 需要正确关闭 channel 避免内存泄漏")
 	fmt.Println("7. 使用缓冲 channel 可以提高性能")
 	fmt.Println("8. 遵循 'Don't communicate by sharing memory' 的设计哲学")
+}
+
+// 优雅关闭 单个发送者，多个接收者
+
+func producer(ch chan int) {
+	defer close(ch) // 确保函数退出时关闭channel
+	for i := 0; i < 5; i++ {
+		ch <- i
+	}
+}
+
+func consumer(id int, ch chan int, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for value := range ch { // range会自动检测channel关闭
+		fmt.Printf("Consumer %d: %d\n", id, value)
+	}
+	fmt.Printf("Consumer %d done\n", id)
+}
+
+func OneProducerMultiConsumer() {
+	ch := make(chan int, 10)
+	var wg sync.WaitGroup
+
+	// 启动消费者
+	for i := 0; i < 3; i++ {
+		wg.Add(1)
+		go consumer(i, ch, &wg)
+	}
+
+	// 启动生产者
+	go producer(ch)
+
+	// 等待所有消费者完成
+	wg.Wait()
+	fmt.Println("All consumers done")
+}
+
+// 优雅关闭 多个发送者，多个接收者
+
+func sender(id int, dataCh chan int, stopCh chan struct{}, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for i := 0; ; i++ {
+		select {
+		case dataCh <- id*100 + i: // 正常发送数据
+		case <-stopCh: // 收到停止信号
+			fmt.Printf("Sender %d stopping\n", id)
+			return
+		}
+	}
+}
+
+func MultiProducerOneConsumer() {
+	dataCh := make(chan int, 10)
+	stopCh := make(chan struct{})
+	var wg sync.WaitGroup
+
+	// 启动多个发送者
+	for i := 0; i < 3; i++ {
+		wg.Add(1)
+		go sender(i, dataCh, stopCh, &wg)
+	}
+
+	// 接收者接收数据
+	go func() {
+		for i := 0; i < 20; i++ {
+			fmt.Printf("Received: %d\n", <-dataCh)
+			time.Sleep(50 * time.Millisecond)
+		}
+		// 通知所有发送者停止
+		close(stopCh)
+	}()
+
+	// 等待所有发送者完成
+	wg.Wait()
+	close(dataCh) // 现在可以安全关闭dataCh
+
+	// 读取剩余数据
+	for value := range dataCh {
+		fmt.Printf("Remaining: %d\n", value)
+	}
+
+	fmt.Println("All done")
+}
+
+// 优雅关闭 多个发送者，多个接收者
+type SafeChannel struct {
+	dataCh chan int
+	stopCh chan struct{}
+	once   sync.Once
+}
+
+func NewSafeChannel() *SafeChannel {
+	return &SafeChannel{
+		dataCh: make(chan int, 20),
+		stopCh: make(chan struct{}),
+	}
+}
+
+// 安全关闭方法
+func (sc *SafeChannel) Close() {
+	sc.once.Do(func() {
+		close(sc.stopCh)                   // 先通知发送者停止
+		time.Sleep(100 * time.Millisecond) // 给发送者时间停止
+		close(sc.dataCh)                   // 再关闭数据channel
+	})
+}
+
+func (sc *SafeChannel) Send(value int) bool {
+	select {
+	case sc.dataCh <- value:
+		return true
+	case <-sc.stopCh:
+		return false
+	}
+}
+func MultiProducerMultiConsumer() {
+	sc := NewSafeChannel()
+	var wg sync.WaitGroup
+
+	// 启动多个发送者
+	for i := 0; i < 5; i++ {
+		wg.Add(1)
+		go func(id int) {
+			defer wg.Done()
+			for j := 0; j < 10; j++ {
+				if !sc.Send(id*100 + j) {
+					fmt.Printf("Sender %d: stopped\n", id)
+					return
+				}
+			}
+		}(i)
+	}
+
+	// 启动多个接收者
+	for i := 0; i < 3; i++ {
+		wg.Add(1)
+		go func(id int) {
+			defer wg.Done()
+			for value := range sc.dataCh {
+				fmt.Printf("Receiver %d: %d\n", id, value)
+				time.Sleep(20 * time.Millisecond)
+			}
+			fmt.Printf("Receiver %d: channel closed\n", id)
+		}(i)
+	}
+
+	// 等待一会儿后优雅关闭
+	time.Sleep(300 * time.Millisecond)
+	sc.Close()
+
+	wg.Wait()
+	fmt.Println("All goroutines done")
 }
