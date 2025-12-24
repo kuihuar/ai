@@ -1,0 +1,12 @@
+- General Coding
+- In-order / Pre-order / Post-order Traversal
+- Greedy
+- Recursion / Backtracking
+- Traversal
+- Breadth-First Search
+- Depth-First Search
+- Binary Search
+- Divide and Conquer
+- Dynamic Programming
+- Graph
+- Two Pointers

@@ -1,0 +1,97 @@
+### 1. Shell基础概念
+Q: 什么是Shell？常见的Shell类型有哪些？
+A:
+
+Shell是用户与操作系统内核之间的命令行接口，负责解析用户输入的命令并调用系统功能。
+
+常见类型：Bash（最常用）、Zsh、Ksh、Csh、Fish等。
+
+Q: 如何执行一个Shell脚本？
+A:
+方法1：使用解释器直接运行
+
+bash script.sh
+方法2：赋予脚本执行权限后运行
+
+chmod +x script.sh
+./script.sh
+
+###  2. 变量与参数
+Q: 如何定义变量？环境变量与局部变量的区别？
+A:
+
+定义变量：
+
+name="John"  # 局部变量
+export NAME="John"  # 环境变量
+区别：环境变量可被子进程继承，局部变量仅在当前Shell生效。
+
+*Q: 如何获取脚本的参数？0、0、1、@和@和的区别？
+A:
+
+$0：脚本名称
+
+$1、$2...：第1、2个参数
+
+$#：参数个数
+
+$@：所有参数列表（每个参数独立）
+
+$*：所有参数合并为一个字符串（默认以空格分隔）
+### 3. 条件判断
+Q: 如何用Shell实现条件判断？
+A:
+使用 if 语句和测试命令 test 或 [ ]、[[ ]]：
+
+数值比较：-eq（等于）、-ne（不等于）、-gt（大于）。
+
+字符串比较：=（相等）、!=（不等）、-z（空字符串）。
+
+文件判断：-f（存在且为文件）、-d（存在且为目录）。
+### 4. 循环结构
+Q: 如何用for循环遍历文件？
+A:
+for file in *.txt; do
+    echo "处理文件: $file"
+done
+
+### 7. 文本处理工具
+Q: 如何用grep查找包含“error”的行？
+A:
+grep "error" logfile.txt
+Q: 如何用sed替换文件中的文本？
+A:
+sed -i 's/old/new/g' file.txt  # 替换所有old为new
+
+8. 文件操作
+Q: 如何检查文件是否存在？
+A:
+if [ -f "/path/to/file" ]; then
+    echo "文件存在"
+fi
+Q: 如何逐行读取文件内容？
+A:
+
+while IFS= read -r line; do
+    echo "$line"
+done < file.txt
+
+9. 错误处理与调试
+Q: 如何让脚本在出错时自动退出？
+A: set -e  # 任何命令失败则退出
+
+Q: 如何调试Shell脚本？
+A: 使用 bash -x script.sh 跟踪执行过程。
+
+
+10. 实战问题
+Q: 编写脚本，备份指定目录到/tmp/backup.tar.gz。
+A:
+#!/bin/bash
+if [ $# -ne 1 ]; then
+    echo "用法: $0 <目录>"
+    exit 1
+fi
+tar -czf /tmp/backup.tar.gz "$1"
+Q: 如何统计当前目录下所有.txt文件的行数总和？
+A: find . -name "*.txt" -exec wc -l {} + | awk '{sum += $1} END {print sum}'

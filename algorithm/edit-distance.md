@@ -79,8 +79,11 @@ func LevenshteinDistance(word1, word2 string) int {
 				dp[i][j] = dp[i-1][j-1]
 			} else {
 				dp[i][j] = min(
+					// 表示「删除 word1 第 i 个字符」
 					dp[i-1][j] + 1,      // 删除
+					// 表示「插入 word2 第 j 个字符到 word1」
 					dp[i][j-1] + 1,      // 插入
+					// 表示「替换 word1 第 i 个字符为 word2 第 j 个字符」
 					dp[i-1][j-1] + 1,    // 替换
 				)
 			}

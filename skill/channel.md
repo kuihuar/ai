@@ -780,3 +780,180 @@ Channel 是 Go 并发编程的核心，它提供了：
 5. **避免死锁** - 确保有对应的发送者和接收者
 
 Channel 是 Go 语言并发编程的基础，掌握其使用对于编写高质量的并发程序至关重要。
+
+
+
+### 无缓冲通道（unbuffered channel）是Go并发编程中重要的同步机制，主要应用场景包括：
+1. 同步等待 - 用于协调多个 goroutine 之间的执行顺序，确保某个操作完成后才继续执行。
+```go
+// 等待goroutine完成
+func main() {
+    done := make(chan struct{})
+    
+    go func() {
+        // 执行任务
+        time.Sleep(time.Second)
+        done <- struct{}{}  // 发送完成信号
+    }()
+    
+    <-done  // 阻塞等待，直到收到信号
+    fmt.Println("任务完成")
+}
+```
+2. 数据交换同步 - 用于在不同 goroutine 之间传递数据，确保数据在发送和接收之间的同步。
+```go
+// 确保发送和接收同时就绪
+func worker(data chan int) {
+    value := <-data  // 阻塞直到主线程发送数据
+    fmt.Println("收到:", value)
+}
+
+func main() {
+    ch := make(chan int)
+    go worker(ch)
+    ch <- 42  // 发送数据，阻塞直到worker接收
+}
+```
+3. 任务分发与负载均衡 - 用于将任务分发到多个 goroutine 处理，实现并发执行和负载均衡。
+```go
+// 控制同时运行的worker数量
+func worker(id int, tasks <-chan string, wg *sync.WaitGroup) {
+    defer wg.Done()
+    for task := range tasks {
+        fmt.Printf("Worker %d: %s\n", id, task)
+        time.Sleep(time.Millisecond * 100)
+    }
+}
+
+func main() {
+    tasks := make(chan string)  // 无缓冲，生产者会阻塞直到有worker就绪
+    var wg sync.WaitGroup
+    
+    // 启动3个worker
+    for i := 1; i <= 3; i++ {
+        wg.Add(1)
+        go worker(i, tasks, &wg)
+    }
+    
+    // 分发任务
+    for i := 1; i <= 10; i++ {
+        tasks <- fmt.Sprintf("Task-%d", i)
+    }
+    
+    close(tasks)
+    wg.Wait()
+}
+```
+4. 信号通知和事件广播 - 用于在不同 goroutine 之间发送信号或事件，通知其他 goroutine 进行相应处理。
+```go
+// 优雅关闭
+func server(stop <-chan struct{}) {
+    for {
+        select {
+        case <-stop:
+            fmt.Println("收到停止信号")
+            return
+        default:
+            // 处理请求
+            time.Sleep(time.Millisecond * 500)
+        }
+    }
+}
+
+func main() {
+    stop := make(chan struct{})
+    go server(stop)
+    
+    time.Sleep(2 * time.Second)
+    close(stop)  // 广播关闭信号
+    time.Sleep(time.Second)
+}
+```
+5. 互斥访问保护 - 用于保护共享资源的访问，确保在任意时刻只有一个 goroutine 可以访问该资源。
+```go
+// 通过channel实现互斥锁
+type Counter struct {
+    value int
+    mutex chan struct{}
+}
+
+func (c *Counter) Inc() {
+    <-c.mutex  // 获取锁（读取）
+    c.value++
+    c.mutex <- struct{}{}  // 释放锁（写入）
+}
+
+func main() {
+    counter := &Counter{
+        mutex: make(chan struct{}, 1),  // 容量为1的缓冲通道
+    }
+    counter.mutex <- struct{}{}  // 初始化放入令牌
+    
+    var wg sync.WaitGroup
+    for i := 0; i < 1000; i++ {
+        wg.Add(1)
+        go func() {
+            defer wg.Done()
+            counter.Inc()
+        }()
+    }
+    wg.Wait()
+    fmt.Println("Counter:", counter.value)
+}
+```
+6. 请求-响应模式 - 用于在客户端和服务器之间进行同步通信，确保请求和响应的顺序和匹配。
+```go
+// 等待响应的RPC模式
+func rpcServer(ch chan<- string, req string) {
+    time.Sleep(time.Millisecond * 100)
+    ch <- "Response to: " + req
+}
+
+func main() {
+    responseCh := make(chan string)
+    
+    // 发送请求
+    go rpcServer(responseCh, "Hello")
+    
+    // 阻塞等待响应
+    resp := <-responseCh
+    fmt.Println(resp)
+}
+```
+7. 节流控制 - 用于限制数据的生产速率，防止过快生产导致资源耗尽。
+```go
+// 控制处理速度，防止生产过快
+func stage1(out chan<- int) {
+    for i := 0; i < 5; i++ {
+        out <- i
+        fmt.Println("Stage1 发送:", i)
+    }
+    close(out)
+}
+
+func stage2(in <-chan int, out chan<- int) {
+    for n := range in {
+        time.Sleep(time.Millisecond * 500)  // 模拟耗时处理
+        out <- n * 2
+        fmt.Println("Stage2 处理:", n)
+    }
+    close(out)
+}
+
+func main() {
+    ch1 := make(chan int)  // 无缓冲，控制流速
+    ch2 := make(chan int)
+    
+    go stage1(ch1)
+    go stage2(ch1, ch2)
+    
+    for result := range ch2 {
+        fmt.Println("结果:", result)
+    }
+}
+```
+8. 不适合场景：
+   - 批处理操作， 需要收集一批数据再处理
+   - 生产消费速度差异大，容易导致goroutine阻塞。
+   - 需要缓冲平滑波动：临时存储突发数据
+

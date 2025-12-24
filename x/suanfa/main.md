@@ -1,0 +1,6 @@
+- Clarification
+- Possible solutions
+   - compare (time/space)
+   - optimal (time/space)
+- Coding
+- Testing

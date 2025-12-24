@@ -1,0 +1,5 @@
+package suanfa
+
+func Test() {
+
+}
