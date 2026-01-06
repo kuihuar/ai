@@ -25,12 +25,20 @@
   - [ ] 查询优化
   - [ ] 主从复制
   - [ ] 分库分表
-- [ ] PostgreSQL
-  - [ ] 高级数据类型
-  - [ ] 存储过程
-  - [ ] 触发器
-  - [ ] 全文搜索
-  - [ ] 扩展功能
+- [x] PostgreSQL
+  - [x] [PostgreSQL 学习指南](./postgresql-learning.md) - 完整的 PostgreSQL 学习资料
+  - [x] [PostgreSQL 基础](./postgresql-basics.md) - 安装、配置、基本操作
+  - [x] [PostgreSQL 数据类型](./postgresql-data-types.md) - 基础类型、高级类型、JSON、数组
+  - [x] [PostgreSQL 索引与查询优化](./postgresql-indexes-optimization.md) - 索引类型、查询计划、性能调优
+  - [x] [PostgreSQL 事务与并发控制](./postgresql-transactions.md) - ACID、隔离级别、锁机制、MVCC
+  - [x] [PostgreSQL 存储过程与函数](./postgresql-functions.md) - PL/pgSQL、触发器、自定义函数
+  - [x] [PostgreSQL 全文搜索](./postgresql-fulltext-search.md) - 全文索引、搜索配置、多语言支持
+  - [x] [PostgreSQL 扩展与插件](./postgresql-extensions.md) - 常用扩展、PostGIS、pg_stat_statements
+  - [x] [PostgreSQL 管理与运维](./postgresql-admin.md) - 用户权限、备份恢复、监控、日志管理
+  - [x] [PostgreSQL 复制与高可用](./postgresql-replication.md) - 主从复制、流复制、高可用方案
+  - [x] [PostgreSQL 最佳实践](./postgresql-best-practices.md) - 设计原则、性能优化、安全实践
+  - [x] [PostgreSQL 常见问题与解决方案](./postgresql-troubleshooting.md) - 常见错误、性能问题、故障排查
+  - [x] [PostgreSQL vs MySQL 全面对比](./postgresql-vs-mysql.md) - 与 MySQL 的详细对比，便于对比学习
 - [ ] Oracle
   - [ ] 体系结构
   - [ ] PL/SQL
