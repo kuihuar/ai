@@ -204,6 +204,74 @@ func BinarySearchIterative(arr []int, target int) int {
     
     return -1
 }
+
+func leftBound(nums []int, target int)int{
+    left, right := 0, len(nums) -1
+    for left <= right{
+        mid := left + (right - left) / 2
+        if nums[mid] >= target {
+            right = mid -1
+        }else {
+            left = mid +1
+        }
+    }
+    if left >= len(nums) || nums[left] != target {
+        return -1
+    }
+    return left
+}
+
+func rightBound(nums []int, target int) {
+
+    left, right := 0,len(nums) -1
+
+    for left <=right {
+        mid := left + (right - left) /2
+        if nums[mid] <=target {
+            left = mid +1
+        }else{
+            right = mid -1
+        }
+    }
+    if right <0 || nums[mid]!= target {
+        return -1
+    }
+    return right
+}
+
+
+func firtGreaterOrEqual(nums []int, target int) {
+    left, right:=0, len(nums)-1
+
+    for left <=right {
+        mid := left+(right-left) /2
+
+        if nums[mid] >=target {
+            right = mid -1
+        }else{
+            left =mid +1
+        }
+    }
+    return left
+}
+
+
+func lasetLessEqual(nums []int, target int) int {
+    left, right :=0, len(nums)-1
+
+
+    for left <= right {
+
+        mid := left + (right - left) /2
+
+        if nums[mid] <=target {
+            left = mid +1
+        }else{
+            right = mid -1
+        }
+    }
+    return right
+}
 ```
 
 ### 4. 大整数乘法 (Karatsuba Algorithm)

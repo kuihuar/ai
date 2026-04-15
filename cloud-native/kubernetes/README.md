@@ -30,6 +30,8 @@
 ### 第五阶段：扩展开发
 - [Operator模式](./19-operator/README.md) - 自定义控制器、CRD、自动化运维
 - [Kubebuilder开发](./20-kubebuilder/README.md) - 快速构建Kubernetes控制器
+- [Kubeflow](./21-kubeflow/README.md) - 云原生机器学习平台与MLOps实践
+- [Volcano](./22-volcano/README.md) - 批处理与AI/HPC任务调度平台
 
 ### 第六阶段：实战应用
 - [微服务部署](./12-microservices/README.md) - 微服务架构在K8s上的实践
