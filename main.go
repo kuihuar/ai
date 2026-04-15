@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -20,8 +23,39 @@ func modifyArrayWithPointer(arr *[3]int) {
 		(*arr)[i] *= 2
 	}
 }
+func abc() {
+	a := 0
+	b := 0
 
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println(err)
+			break
+		}
+		line = strings.TrimSpace(line)
+		parts := strings.SplitN(line, " ", 2)
+		if len(parts) != 2 {
+			fmt.Println("输入格式错误")
+			continue
+		}
+		a, err = strconv.Atoi(parts[0])
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		b, err = strconv.Atoi(parts[1])
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		fmt.Printf("%d + %d = %d\n", a, b, a+b)
+	}
+	return
+}
 func main() {
+
 	fmt.Println("=== Go GMP 模型详解 ===")
 
 	explainGMPModel()
@@ -105,6 +139,13 @@ func demonstrateGC() {
 	fmt.Printf("   ✅ 回收了约 %d KB 内存（白色对象被删除）\n",
 		(m1.HeapAlloc-m2.HeapAlloc)/1024)
 	fmt.Printf("   ✅ GC 次数: %d\n", m2.NumGC)
+}
+
+func testt() {
+	bigSlice := make([]byte, 1024*1024)
+
+	res := append([]byte(nil), bigSlice[100:200]...)
+	fmt.Print(res)
 }
 
 // 分配内存的函数

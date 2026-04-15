@@ -19,10 +19,10 @@
 ### 1.2 节点平面（Worker Node）
 
 1. `kubelet`：负责节点上 Pod 生命周期管理
-2. `container runtime`（containerd 等）：负责镜像拉取、容器创建与运行
-3. `kube-proxy`：维护 Service 转发规则（iptables/ipvs）
-4. `CNI` 插件（Calico/Flannel/Cilium 等）：负责 Pod 网络
-5. `CSI` 插件：负责卷挂载/卸载
+2. `CRI`（Container Runtime Interface）及其实现（containerd/CRI-O）：负责镜像拉取、容器创建与运行
+3. `CNI`（Container Network Interface）插件（Calico/Flannel/Cilium 等）：负责 Pod 网络、IP 分配与路由
+4. `CSI`（Container Storage Interface）插件：负责卷供应、挂载/卸载与扩容（常见实现：EBS CSI、GCE PD CSI、Azure Disk CSI、Ceph CSI、Longhorn CSI、NFS CSI）
+5. `kube-proxy`：监听 Service/EndpointSlice 变化，在节点侧生成与维护 Service 转发规则（iptables/ipvs），实现 `ClusterIP`/`NodePort`/`LoadBalancer` 的四层流量转发与基础负载分发
 
 > 说明：CoreDNS、Ingress Controller 通常以工作负载（Deployment）形式运行在集群里，不是每个 Node 的“基础组件”。
 
@@ -522,3 +522,39 @@ kubectl get events -n <namespace> --sort-by=.metadata.creationTimestamp
    kubectl get pods -n longhorn-system
    kubectl describe pvc <pvc-name> -n <namespace>
    ```
+
+---
+
+## 11. 易混点专项说明：CNI / kube-proxy / Calico（难理解点）
+
+这一段专门解释一个高频困惑：**Calico 到底是 CNI，还是 kube-proxy 替代品？**
+
+### 11.1 先记结论（一句话）
+
+**默认情况下，Calico 不是 kube-proxy 的替代；但在 Calico eBPF 数据平面模式下，Calico 可以接管 Service 转发能力，从而达到“等效替代 kube-proxy”的效果。**
+
+### 11.2 角色对比（避免混淆）
+
+| 组件 | 主要职责 | 默认关系 |
+| :--- | :--- | :--- |
+| `CNI`（Calico/Cilium/Flannel） | Pod 网络连通、IP 分配、路由 | 与 kube-proxy 并存 |
+| `kube-proxy` | Service 四层转发（ClusterIP/NodePort/LB） | 与 CNI 配合工作 |
+| `NetworkPolicy`（由 CNI实现） | 网络访问控制（L3/L4） | 通常由 Calico/Cilium 执行 |
+
+### 11.3 为什么会觉得“Calico 替代了 kube-proxy”（难理解点）
+
+原因在于“**部署模式不同**”：
+
+1. **传统模式（最常见）**
+   - CNI（Calico）负责 Pod 网络
+   - kube-proxy 负责 Service 转发
+   - 结论：不是替代关系
+
+2. **eBPF 模式（特定能力）**
+   - Calico 使用 eBPF 接管部分 Service 转发路径
+   - kube-proxy 可关闭或弱化
+   - 结论：在该模式下可以“等效替代”
+
+### 11.4 面试标准回答模板（可直接背）
+
+「Calico本质是 CNI 与网络策略实现，不是默认意义上的 kube-proxy 替代品。传统模式下它和 kube-proxy 分工协作：Calico 负责 Pod 网络，kube-proxy 负责 Service 转发。只有在 Calico eBPF 模式下，Calico 才能接管 Service 转发路径，实践上实现对 kube-proxy 的替代。」 

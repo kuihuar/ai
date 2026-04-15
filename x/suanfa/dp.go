@@ -1,11 +1,6 @@
 package suanfa
 
-
-
-
-
-
-ch1:= make(chan int)
+// ch1:= make(chan int)
 
 // 300. 最长递增子序列
 // 不能位置调换

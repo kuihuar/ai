@@ -302,3 +302,117 @@ sum(rate(container_cpu_usage_seconds_total{namespace="kubevirt"}[5m]))
 ## 10. 面试回答模板（30 秒）
 
 「可观察性我会按指标、日志、链路三层讲。Prometheus 负责拉取时序指标和规则告警，Grafana做可视化，Alertmanager做告警路由。落地时我会先定义 SLO 指标，再补平台与依赖指标，比如 KubeVirt 的 VMI 状态、Longhorn 卷健康、Operator Reconcile 错误率。排障流程是先看告警和趋势，再关联日志与对象状态，最后定位到控制器代码分支，形成闭环。」 
+
+---
+
+## 11. 可观察性面试题（含答题模板）
+
+## 11.1 基础题
+
+### Q1：什么是可观察性？和监控有什么区别？
+
+- **标准回答（30 秒）**  
+  监控更偏已知问题检测，比如阈值告警；可观察性更偏未知问题诊断，依赖 Metrics、Logs、Traces 的关联分析能力。监控是可观察性的一部分，但可观察性覆盖从发现问题到定位根因的完整闭环。
+- **追问加分点（90 秒）**  
+  说明你会如何做三者联动：指标先定位时间窗，日志看错误上下文，链路追踪看调用路径和耗时瓶颈。
+
+### Q2：可观察性三支柱分别适合什么场景？
+
+- **标准回答（30 秒）**  
+  Metrics 看趋势和告警；Logs 看细节和上下文；Traces 看跨服务调用路径和延迟分解。三者结合才能完整定位复杂故障。
+- **追问加分点（90 秒）**  
+  结合例子：VMI Pending 先看指标异常，再看 virt-controller/调度日志，最后看链路（如果接入）确认外部依赖慢点。
+
+### Q3：Prometheus 是 pull 还是 push？为什么？
+
+- **标准回答（30 秒）**  
+  Prometheus 默认 pull，从 `/metrics` 抓取；好处是统一发现目标、集中配置抓取和健康检查。短生命周期任务可结合 Pushgateway。
+- **追问加分点（90 秒）**  
+  说明 push 不适合直接替代 pull，因为会削弱 Prometheus 对采集链路可控性和健康感知。
+
+## 11.2 Prometheus 进阶题
+
+### Q4：高基数 label 为什么危险？
+
+- **标准回答（30 秒）**  
+  高基数会让时序数量爆炸，导致 Prometheus 内存占用和查询开销陡增，严重时会拖垮采集和查询性能。
+- **追问加分点（90 秒）**  
+  给治理建议：避免 user_id/request_id 做 label，保留 namespace/workload/component 这类稳定维度。
+
+### Q5：Histogram 和 Summary 怎么选？
+
+- **标准回答（30 秒）**  
+  需要跨实例聚合分位数时选 Histogram；Summary 的分位数通常是客户端本地计算，不适合全局聚合。
+- **追问加分点（90 秒）**  
+  给出 PromQL 示例：`histogram_quantile(0.95, sum(rate(metric_bucket[5m])) by (le))`。
+
+### Q6：ServiceMonitor 与 PodMonitor 的区别？
+
+- **标准回答（30 秒）**  
+  ServiceMonitor 通过 Service 选目标，适合稳定服务入口；PodMonitor 直接抓 Pod，适合无 Service 或需要更细粒度抓取。
+- **追问加分点（90 秒）**  
+  说明生产上一般优先 ServiceMonitor，减少 Pod churn 带来的抓取波动。
+
+### Q7：Alertmanager 的核心价值是什么？
+
+- **标准回答（30 秒）**  
+  Alertmanager 负责告警分组、去重、抑制和路由，防止告警风暴，并把不同级别告警送到不同通知渠道。
+- **追问加分点（90 秒）**  
+  提到静默窗口、值班路由、升级策略（on-call escalations）。
+
+## 11.3 日志与链路追踪题
+
+### Q8：Loki 和 ELK 怎么选？
+
+- **标准回答（30 秒）**  
+  Loki 成本低、与 Grafana 集成好，适合云原生日志场景；ELK 检索能力强但资源和维护成本更高。
+- **追问加分点（90 秒）**  
+  结合团队规模和预算给取舍原则：中小团队优先 Loki，全文检索强诉求可选 ELK/OpenSearch。
+
+### Q9：OpenTelemetry Collector 的价值是什么？
+
+- **标准回答（30 秒）**  
+  OTel Collector 把采集与后端解耦，统一接收/处理/转发 metrics、logs、traces，降低应用侧改造成本。
+- **追问加分点（90 秒）**  
+  说明它还能做采样、过滤、脱敏、批量发送，兼顾性能与成本。
+
+### Q10：如何把 Metrics、Logs、Traces 打通？
+
+- **标准回答（30 秒）**  
+  用统一上下文字段（如 `trace_id`、`request_id`）关联三类数据，先指标告警，再日志定位，再追踪路径还原。
+- **追问加分点（90 秒）**  
+  讲清楚治理前提：统一日志格式、统一采样策略、统一服务命名规范。
+
+## 11.4 虚拟化场景实战题（贴近当前项目）
+
+### Q11：VMI 长时间 Pending，如何用可观察性定位？
+
+- **标准回答（30 秒）**  
+  先看 VMI Pending 数和调度失败指标，再看事件和 virt-controller 日志，最后查 PVC 绑定、NAD/网络依赖和节点资源约束。
+- **追问加分点（90 秒）**  
+  结合代码路径：回到 Reconcile 的网络/存储分支，确认是 Requeue 还是 Error。
+
+### Q12：Reconcile error 激增时你看哪些指标？
+
+- **标准回答（30 秒）**  
+  看 `reconcile_total`、`reconcile_errors_total`、`reconcile_duration_seconds` 的 p95/p99，以及队列堆积和重试频率。
+- **追问加分点（90 秒）**  
+  再结合日志字段（`wukong_name`、`phase`、`reconcile_id`）快速聚类错误类型。
+
+### Q13：Longhorn 存储问题怎么观测？
+
+- **标准回答（30 秒）**  
+  看 PVC 绑定时长、卷健康状态、attach/mount 失败事件和扩容状态，区分“控制面成功”与“客体文件系统未扩容”。
+- **追问加分点（90 秒）**  
+  强调状态分层：PVC/PV -> CSI 事件 -> VM 内文件系统。
+
+### Q14：为什么 VM Running 了业务还不可用？
+
+- **标准回答（30 秒）**  
+  Running 只代表实例跑起来，不代表网络、DNS、依赖服务都可用；要继续检查 Multus/NAD、NetworkPolicy、CoreDNS、上游服务可达性。
+- **追问加分点（90 秒）**  
+  给“分层验收”思路：L2/L3 连通、DNS 解析、L7 业务协议。
+
+## 11.5 快速口述总模板（可背）
+
+「可观察性我会按指标、日志、链路三层建设。Prometheus 负责抓取、存储、查询和告警评估，Alertmanager 负责告警治理，Grafana 做可视化。落地时重点避免高基数标签，围绕 SLO、平台、业务、依赖四层设计告警。排障时先看指标定位时间窗，再看日志拿错误细节，最后用链路追踪找调用瓶颈，并回到对象状态和控制器代码确认根因。」 
