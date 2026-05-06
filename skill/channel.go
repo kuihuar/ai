@@ -57,6 +57,10 @@ func BufferedChannelExample() {
 	fmt.Printf("Received: %d\n", <-ch)
 }
 
+func produce(out chan<- int){}
+func consume(in <-chan int){}
+
+
 // 2.3 channel 方向性
 func ChannelDirectionExample() {
 	// 双向 channel

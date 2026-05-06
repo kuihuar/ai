@@ -49,3 +49,43 @@
 - 先 DNS（CoreDNS）再 Service/Endpoint
 - 再看 Pod 内连通性（curl/nslookup）
 - 最后回应用日志与探针状态
+
+
+
+### 追问 4：k8s 资源创建流程？
+**要点：**
+- 资源声明
+- API Server 接收
+- Controller 处理
+- 事件触发
+- 资源状态更新
+- 通知其他组件 
+
+####  控制面流程
+1. 客户端提交资源声明（kubectl or API）
+2. API Server 接收并校验
+   - 认证
+   - 授权
+   - 校验
+   - 准入
+3. 持久化
+4. 调度器决策 scheduler
+   - Filter(预筛选)
+   - Score(打分)
+   - Bind(绑定节点)
+5. 更新ETCD（API SERVER 将nodeName 更新到资源声明中，写入ETCD中）
+####  工作节点流程
+1. Kubelet 监听 到API server 变化,发瑞POD 创建事件
+2. 创建 容器沙箱（Pause Container）
+    - kubetl 调用CRI API 启动 CRI 运行时
+3. 调用 CNI API 配置网络
+4. 调用 CSI API 挂载存储卷
+5. 拉取应用镜像
+6. 启动应用容器
+7. 更新 Pod 状态为 Running
+####  Pod 生命周期
+- Pending
+- Running
+- Succeeded
+- Failed
+- Unknown
