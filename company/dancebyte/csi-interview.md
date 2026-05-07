@@ -195,3 +195,13 @@ Longhorn 特点
     - Controller Service：负责创建、删除、挂载、卸载卷（对应云端操作）。
 
     - Node Service：运行在每个 Node 上，负责最后一步：将块设备格式化并挂载到 Pod 的目录里。
+
+2. 存储对象的逻辑关系
+
+StorageClass (SC)：运维定义的“模板”，描述存储的性能、类型。
+
+PersistentVolume (PV)：实际的资源，由 SC 自动创建或人工创建。
+
+PersistentVolumeClaim (PVC)：用户的“申请单”，声明需要多大空间、什么访问模式。
+
+Pod：使用者，通过挂载 PVC 来使用存储。    
