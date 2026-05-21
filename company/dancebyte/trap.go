@@ -201,3 +201,30 @@ func min(a, b int) int {
 	}
 	return b
 }
+
+
+func digit10To16(input int) string {
+	if input == 0 {
+		return "0"
+	}
+	var res []byte
+	for input > 0 {
+		d := input % 16
+		if d < 10 {
+			res = append(res, byte('0'+d))
+		} else {
+			res = append(res, byte('a'+(d-10)))
+		}
+		input /= 16
+	}
+	// for i, j := 0, len(res)-1; i < j; i, j = i+1, j-1 {
+	// 	res[i], res[j] = res[j], res[i]
+	// }
+	slices.Reverse(res)
+	return string(res)
+
+
+	for i,j:=0,len(res)-1;i<j;j,j=i+1,j-1{
+		res[i],res[j]=res[j],res[i]
+	}
+}

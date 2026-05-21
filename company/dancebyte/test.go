@@ -64,3 +64,6 @@ func (s *SegmentLock) Unlock(key string) {
 	idx := int(h.Sum64() % uint64(s.segmentCnt))
 	s.locks[idx].Unlock()
 }
+
+
+
