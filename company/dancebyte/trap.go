@@ -2,6 +2,35 @@ package dancebyte
 
 import "fmt"
 
+func QuickSort(arr []int) []int {
+	if len(arr) <= 1 {
+		return arr
+	}
+
+	// 选择基准元素（这里选择第一个元素）
+	pivot := arr[0]
+
+	// 分解：将数组分为小于基准和大于基准的两部分
+	var left, right []int
+	for i := 1; i < len(arr); i++ {
+		if arr[i] <= pivot {
+			left = append(left, arr[i])
+		} else {
+			right = append(right, arr[i])
+		}
+	}
+
+	// 递归排序左右两部分
+	left = QuickSort(left)
+	right = QuickSort(right)
+
+	// 合并：左部分 + 基准 + 右部分
+	result := append(left, pivot)
+	result = append(result, right...)
+
+	return result
+}
+
 // 接雨水，暴力解法
 func trap(height []int) int {
 	if len(height) == 0 {
@@ -30,32 +59,32 @@ func trap(height []int) int {
 	}
 	return res
 }
-func max(a, b int) int {
-	if a > b {
-		return a
+func trap4(height []int) int {
+	if len(height) == 0 {
+		return 0
 	}
-	return b
-}
-func trapx(height []int) int {
 	var res int
 	n := len(height)
 	leftMax := make([]int, n)
 	rightMax := make([]int, n)
 
+	// 1. 从左往右算左最大值（从 i=1 开始！）
 	leftMax[0] = height[0]
-
 	for i := 1; i < n; i++ {
 		leftMax[i] = max(leftMax[i-1], height[i])
 	}
-	rightMax[n-1] = height[n-1]
 
+	// 2. 从右往左算右最大值（从 i=n-2 开始！）
+	rightMax[n-1] = height[n-1]
 	for i := n - 2; i >= 0; i-- {
 		rightMax[i] = max(rightMax[i+1], height[i])
 	}
 
+	// 3. 计算总雨水量
 	for i := 1; i < n-1; i++ {
 		res += min(leftMax[i], rightMax[i]) - height[i]
 	}
+
 	return res
 }
 
@@ -193,6 +222,7 @@ func max(a, b int) int {
 		return a
 	}
 	return b
+
 }
 
 func min(a, b int) int {
@@ -200,31 +230,4 @@ func min(a, b int) int {
 		return a
 	}
 	return b
-}
-
-
-func digit10To16(input int) string {
-	if input == 0 {
-		return "0"
-	}
-	var res []byte
-	for input > 0 {
-		d := input % 16
-		if d < 10 {
-			res = append(res, byte('0'+d))
-		} else {
-			res = append(res, byte('a'+(d-10)))
-		}
-		input /= 16
-	}
-	// for i, j := 0, len(res)-1; i < j; i, j = i+1, j-1 {
-	// 	res[i], res[j] = res[j], res[i]
-	// }
-	slices.Reverse(res)
-	return string(res)
-
-
-	for i,j:=0,len(res)-1;i<j;j,j=i+1,j-1{
-		res[i],res[j]=res[j],res[i]
-	}
 }
