@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	//"./algorithm"
 	"github.com/kuihuar/ai/algorithm"
+	"github.com/kuihuar/ai/x/suanfa"
 )
 
 func modifyArr(arr *[3]int) {
@@ -56,13 +56,28 @@ func abc() {
 }
 func main() {
 
-	fmt.Println("=== Go GMP 模型详解 ===")
+	// 测试整数切片
+	numbers := []int{34, 7, 23, 32, 5, 62, 32, 12, 0}
+	// fmt.Println("排序前的整数:", numbers)
+	// suanfa.QuickSortGeneric(numbers)
+	// fmt.Println("排序后的整数:", numbers)
 
-	explainGMPModel()
+	// // 测试字符串切片
+	// words := []string{"golang", "apple", "quicksort", "binary", "data"}
+	// fmt.Println("排序前的字符串:", words)
+	// suanfa.QuickSortGeneric(words)
+	// fmt.Println("排序后的字符串:", words)
+	fmt.Println("排序前的整数:", numbers)
+	suanfa.BubbleSort(numbers)
+	fmt.Println("排序后的整数:", numbers)
 
-	// 演示 GMP 实际运行
-	fmt.Println("\n\n=== GMP 实际运行演示 ===")
-	demonstrateGMP()
+	// fmt.Println("=== Go GMP 模型详解 ===")
+
+	// explainGMPModel()
+
+	// // 演示 GMP 实际运行
+	// fmt.Println("\n\n=== GMP 实际运行演示 ===")
+	// demonstrateGMP()
 }
 
 // 解释三色标记算法
