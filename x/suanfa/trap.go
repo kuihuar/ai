@@ -231,3 +231,159 @@ func min(a, b int) int {
 	}
 	return b
 }
+
+// trapBruteForce 接雨水 - 暴力解法
+// 时间复杂度: O(n²) | 空间复杂度: O(1)
+func trapBruteForce(height []int) int {
+	if len(height) == 0 {
+		return 0
+	}
+
+	n := len(height)
+	var res int
+
+	// 最左和最右两个边界一定存不住水，直接从 1 遍历到 n-2
+	for i := 1; i < n-1; i++ {
+		leftMax := 0
+		rightMax := 0
+
+		// 1. 现场向左扫描，寻找当前位置左侧（包含自身）的最大高度
+		for l := i; l >= 0; l-- {
+			leftMax = max(leftMax, height[l])
+		}
+
+		// 2. 现场向右扫描，寻找当前位置右侧（包含自身）的最大高度
+		for r := i; r < n; r++ {
+			rightMax = max(rightMax, height[r])
+		}
+
+		// 3. 当前柱子能接的水 = min(左侧最高, 右侧最高) - 当前柱子高度
+		res += min(leftMax, rightMax) - height[i]
+	}
+
+	return res
+}
+
+// trap 计算给定高度图能接的雨水总量
+// 核心思想：对于索引 i 处的柱子，它上方能装的水取决于 min(左边最高柱子, 右边最高柱子) - 当前柱子高度
+func trapDP(height []int) int {
+	// 边界条件判断：如果数组为空，无法接水，直接返回 0
+	if len(height) == 0 {
+		return 0
+	}
+
+	n := len(height)
+	var res int
+
+	// leftMax[i] 表示索引 i 及其左边所有柱子中的最大高度
+	leftMax := make([]int, n)
+	// rightMax[i] 表示索引 i 及其右边所有柱子中的最大高度
+	rightMax := make([]int, n)
+
+	// 初始化边界值：
+	// 最左边的柱子，其左侧最大高度就是它自己
+	leftMax[0] = height[0]
+	// 最右边的柱子，其右侧最大高度就是它自己
+	rightMax[n-1] = height[n-1]
+
+	// 从左向右遍历，填充 leftMax 数组
+	// 状态转移方程：leftMax[i] = max(左边前一个位置的最大值, 当前柱子高度)
+	for left := 1; left < n; left++ {
+		leftMax[left] = max(leftMax[left-1], height[left])
+	}
+
+	// 从右向左遍历，填充 rightMax 数组
+	// 状态转移方程：rightMax[i] = max(右边后一个位置的最大值, 当前柱子高度)
+	for right := n - 2; right >= 0; right-- {
+		rightMax[right] = max(rightMax[right+1], height[right])
+	}
+
+	// 计算每个柱子上方能接的水，并累加到结果中
+	// 注意：最左边 (i=0) 和最右边 (i=n-1) 的柱子边界无法留水，所以从 1 遍历到 n-2
+	for i := 1; i < n-1; i++ {
+		// 当前位置能装的水 = min(左边最高, 右边最高) - 当前柱子高度
+		res += min(leftMax[i], rightMax[i]) - height[i]
+	}
+
+	return res
+}
+
+// trapDynamicProgramming 接雨水 - 动态规划解法
+// 时间复杂度: O(n) | 空间复杂度: O(n)
+func trapDynamicProgramming(height []int) int {
+	if len(height) == 0 {
+		return 0
+	}
+
+	n := len(height)
+	var res int
+
+	// leftMax[i] 表示位置 i 及其左边的最高柱子
+	// rightMax[i] 表示位置 i 及其右边的最高柱子
+	leftMax := make([]int, n)
+	rightMax := make([]int, n)
+
+	leftMax[0] = height[0]
+	rightMax[n-1] = height[n-1]
+
+	// 从左向右预处理左侧最大值
+	for left := 1; left < n; left++ {
+		leftMax[left] = max(leftMax[left-1], height[left])
+	}
+
+	// 从右向左预处理右侧最大值
+	for right := n - 2; right >= 0; right-- {
+		rightMax[right] = max(rightMax[right+1], height[right])
+	}
+
+	// 汇总每个位置的接水量
+	for i := 1; i < n-1; i++ {
+		res += min(leftMax[i], rightMax[i]) - height[i]
+	}
+
+	return res
+}
+
+
+
+// trapTwoPointers 接雨水 - 双指针解法
+// 时间复杂度: O(n) | 空间复杂度: O(1)
+func trapTwoPointers(height []int) int {
+	if len(height) == 0 {
+		return 0
+	}
+
+	// 1. 初始化双指针分别指向首尾
+	left, right := 0, len(height)-1
+
+	// 2. 维护左右两侧已知的最大值
+	leftMax, rightMax := 0, 0
+
+	var res int
+
+	// 3. 当左右指针未相遇时循环
+	for left < right {
+		// 更新左侧和右侧的最大高度
+		leftMax = max(leftMax, height[left])
+		rightMax = max(rightMax, height[right])
+
+		// 4. 谁小就结算谁，因为较小的一方是木桶的“短板”
+		if leftMax < rightMax {
+			// 左侧是瓶颈，计算 left 位置的水量并右移
+			res += leftMax - height[left]
+			left++
+		} else {
+			// 右侧是瓶颈，计算 right 位置的水量并左移
+			res += rightMax - height[right]
+			right--
+		}
+	}
+
+	return res
+}
+
+
+3. 三种解法全方位对比
+维度		暴力解法 (trapBruteForce)	动态规划 (trapDynamicProgramming)	双指针 (trapTwoPointers)
+时间复杂度	$\mathcal{O}(n^2)$			$\mathcal{O}(n)$					$\mathcal{O}(n)$
+空间复杂度	$\mathcal{O}(1)$			$\mathcal{O}(n)$					$\mathcal{O}(1)$
